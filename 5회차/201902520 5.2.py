@@ -1,5 +1,5 @@
 import sys
-class DNode:        #이중연결리스트로 구현
+class DNode:        #이중연결리스트로 구현 그냥 연결리스트와는 달리 이전노드로 갈 수 있어서 접근하기 쉬우나 메모리는 더 많이 
     def __init__(self,e):
         self.data=e
         self.back=None
