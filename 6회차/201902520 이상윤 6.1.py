@@ -9,19 +9,20 @@ class Course:
 
     def new(self,number,name):
         stu=Student(number,name)
-        stu_info=stu.stu_num+' '+stu.stu_name
-        self.stu_list.append(stu_info)
+        self.stu_list.append(stu.stu_num+' '+stu.stu_name)
 
     def cancel(self,number):
         for i in range(len(self.stu_list)):
-            if self.stu_list[i][0:4]==number:
+            innumber,inname=self.stu_list[i].split()
+            if innumber==number:
                 index=i
                 break
         del self.stu_list[index]
 
     def rshow(self,number):
         for i in range(len(self.stu_list)):
-            if self.stu_list[i][0:4]==number:
+            innumber,inname=self.stu_list[i].split()
+            if innumber==number:
                 print(self.stu_list[i])
                 break
 
@@ -51,9 +52,3 @@ while True:
         soogang.print()
     elif command[0]=='Q':
         break
-        
-
-
-
-        
-        
