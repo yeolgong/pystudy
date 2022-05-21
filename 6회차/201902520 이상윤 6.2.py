@@ -1,6 +1,4 @@
 
-from platform import node
-
 
 class Student:
     def __init__(self,number,name,major,grade,score=''):
@@ -12,7 +10,6 @@ class Student:
 
 class TNode:
     def __init__(self,key,value,left=None,right=None):
-        stu=Student(Student.stu_number,Student.stu_name,Student.stu_major,Student.stu_grade,Student.stu_score)
         self.key=key
         self.value=value
         self.left=left
@@ -21,6 +18,8 @@ class TNode:
 class Course:
     def __init__(self):
         self.root=None
+        self.printlist=[]
+
 
     def insert(self,key,value):#1
         self.root=self.insertsubtree(self.root,key,value)
@@ -29,6 +28,8 @@ class Course:
             return TNode(key,value)
         elif key<node.key:
             node.left=self.insertsubtree(node.left,key,value)
+        elif key>node.key:
+            node.right=self.insertsubtree(node.right,key,value)
         else:
             pass
         return node
@@ -50,7 +51,7 @@ class Course:
         else:
             return self.minnode(node.left)
     def delete(self,key):#3
-        self.root=self.deletestubree(self.root,key)
+        self.root=self.deletesubtree(self.root,key)
     def deletesubtree(self,node,key):
         if node==None:
             return None
@@ -69,27 +70,87 @@ class Course:
             node.key=rightminnode.key
             node.value=rightminnode.value
             node.right=self.deletesubtree(node.right,rightminnode.key)
-            #return node
+            return node
 
-
+    def inorder(self):
+        self.printlist=[]
+        self.subtreeinorder(self.root)
+    def subtreeinorder(self,p):
+        if p is not None:
+            self.subtreeinorder(p.left)
+            self.printlist.append(p)
+            self.subtreeinorder(p.right)
+            
 
 
     def new(self,number,name,major,grade):#1
         stu=Student(number,name,major,grade)
-        TNode(stu.stu_number,stu)
         if self.search(number) is None:
-            self.insert(name,stu)
+            self.insert(number,stu)
         else:
             print('error1')
 
-    def grade(self,number,score):#2
+    def scorein(self,number,score):#2
         node=self.search(number)
-        node.value.score=score
+        if node is not None:
+            node.value.stu_score=score
+        else:
+            print('error2')
 
-    def cancel(self,number)
+    def cancel(self,number):
+        if self.search(number) is not None:
+            self.delete(number)
+        else:
+            print('error2')
+    
+    def rshow(self,number):
+        if self.search(number) is not None:
+            node=self.search(number)
+            print(node.value.stu_number+' '+node.value.stu_name+' '+node.value.stu_major+' '+node.value.stu_grade+' '+node.value.stu_score)
+        else:
+            print('error2')
 
 
+    def majorshow(self,major):
+        self.inorder()
+        result=[]
+        for i in range(len(self.printlist)):
+            if self.printlist[i].value.stu_major==major:
+                node=self.printlist[i]
+                result.append(node)
+        print(len(result))
+        for i in range(len(result)):
+            node=result[i]
+            print(node.value.stu_number+' '+node.value.stu_name+' '+node.value.stu_major+' '+node.value.stu_grade+' '+node.value.stu_score)
+    
+    def printout(self):
+        self.inorder()
+        print(len(self.printlist))
+        for i in range(len(self.printlist)):
+            node=self.printlist[i]
+            print(node.value.stu_number+' '+node.value.stu_name+' '+node.value.stu_major+' '+node.value.stu_grade+' '+node.value.stu_score)
+    
 
-
-
+stuadmin=Course()
+while True:
+    command=input()
+    if command[0]=='N':
+        do,number,name,major,grade=command.split()
+        stuadmin.new(number,name,major,grade)
+    elif command[0]=='G':
+        do,number,score=command.split()
+        stuadmin.scorein(number,score)
+    elif command[0]=='C':
+        do,number=command.split()
+        stuadmin.cancel(number)
+    elif command[0]=='R':
+        do,number=command.split()
+        stuadmin.rshow(number)
+    elif command[0]=='D':
+        do,major=command.split()
+        stuadmin.majorshow(major)
+    elif command[0]=='P':
+        stuadmin.printout()
+    elif command[0]=='Q':
+        break
 
